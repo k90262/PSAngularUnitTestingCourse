@@ -30,12 +30,18 @@ describe('HeroesComponent (Deep tests)', () => {
             schemas: [NO_ERRORS_SCHEMA] // skip routerLink error
         });
         fixture = TestBed.createComponent(HeroesComponent);
-        mockHeroService.getHeroes.and.returnValue(of(HEROES));
-
-        fixture.detectChanges();
     });
 
-    it('should be true', () => {
-        expect(true).toBe(true);
+    it('should render each hero as a HeroComponent', () => {
+        mockHeroService.getHeroes.and.returnValue(of(HEROES));
+
+        // run ngOnInit
+        fixture.detectChanges();
+
+        var heroComponentDEs = fixture.debugElement.queryAll(By.directive(HeroComponent));
+        expect(heroComponentDEs.length).toBe(3);
+        for (let i=0; i<heroComponentDEs.length; i++) {
+            expect(heroComponentDEs[i].componentInstance.hero).toBe(HEROES[i]);
+        }
     });
 });
