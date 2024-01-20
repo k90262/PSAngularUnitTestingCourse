@@ -58,7 +58,9 @@ describe('HeroesComponent (Deep tests)', () => {
       // hereoComponets[0].query(By.css('button'))
       //     .triggerEventHandler('click', {stopPropagation: () => {}});
       // METHOD 2. just test binding
-      (<HeroComponent>hereoComponets[0].componentInstance).delete.emit(undefined);
+      // (<HeroComponent>hereoComponets[0].componentInstance).delete.emit(undefined);
+      // METHOD 3. just use debugElement to trigger event
+      hereoComponets[0].triggerEventHandler('delete', null);
 
       expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
   });
