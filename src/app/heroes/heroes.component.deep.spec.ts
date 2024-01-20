@@ -54,8 +54,11 @@ describe('HeroesComponent (Deep tests)', () => {
       fixture.detectChanges();
 
       const hereoComponets = fixture.debugElement.queryAll(By.directive(HeroComponent));
-      hereoComponets[0].query(By.css('button'))
-          .triggerEventHandler('click', {stopPropagation: () => {}});
+      // METHOD 1. real trigger button click event
+      // hereoComponets[0].query(By.css('button'))
+      //     .triggerEventHandler('click', {stopPropagation: () => {}});
+      // METHOD 2. just test binding
+      (<HeroComponent>hereoComponets[0].componentInstance).delete.emit(undefined);
 
       expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
   });
