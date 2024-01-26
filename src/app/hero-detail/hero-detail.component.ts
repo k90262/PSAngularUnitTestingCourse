@@ -34,7 +34,25 @@ export class HeroDetailComponent implements OnInit {
   }
 
  save(): void {
+   debounce(() => {
     this.heroService.updateHero(this.hero)
       .subscribe(() => this.goBack());
+    }, 250, false)();
   }
 }
+
+// just to test async. Looks some bug existed when call multiple times
+function debounce(func, wait, immediate) {
+  var timeout = null;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+};
