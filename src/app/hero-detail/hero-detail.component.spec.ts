@@ -32,9 +32,21 @@ describe('HeroDetailComponent', () => {
         mockHeroService.getHero.and.returnValue(of({id: '3', name: 'SuperDude', strength: 100}));
     });
 
-    it('shoudl render hero name in a h2 tag', () => {
+    it('should render hero name in a h2 tag', () => {
         fixture.detectChanges();
 
         expect(fixture.nativeElement.querySelector('h2').textContent).toContain('SUPERDUDE');
+    });
+
+    it('should call updateHero when save is clicked', (done) => {
+        mockHeroService.updateHero.and.returnValue(of({}));
+        fixture.detectChanges();
+
+        fixture.componentInstance.save();
+
+        setTimeout(() => {
+            expect(mockHeroService.updateHero).toHaveBeenCalled();
+            done();
+        }, 2100)
     });
 });
