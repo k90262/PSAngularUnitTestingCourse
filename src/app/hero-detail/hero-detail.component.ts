@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 
 import { Hero }         from '../hero';
 import { HeroService }  from '../hero.service';
+import { debounce } from '../debounce/debounce.decorator';
 
 @Component({
   selector: 'app-hero-detail',
@@ -33,26 +34,27 @@ export class HeroDetailComponent implements OnInit {
     this.location.back();
   }
 
+ @debounce(2000)
  save(): void {
-   debounce(() => {
+   //debounce(() => {
     this.heroService.updateHero(this.hero)
       .subscribe(() => this.goBack());
-    }, 250, false)();
+    //}, 250, false)();
   }
 }
 
 // just to test async. Looks some bug existed when call multiple times
-function debounce(func, wait, immediate) {
-  var timeout = null;
-  return function() {
-    var context = this, args = arguments;
-    var later = function() {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    var callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
-};
+// export function debounce(func, wait, immediate) {
+//   var timeout = null;
+//   return function() {
+//     var context = this, args = arguments;
+//     var later = function() {
+//       timeout = null;
+//       if (!immediate) func.apply(context, args);
+//     };
+//     var callNow = immediate && !timeout;
+//     clearTimeout(timeout);
+//     timeout = setTimeout(later, wait);
+//     if (callNow) func.apply(context, args);
+//   };
+// };
