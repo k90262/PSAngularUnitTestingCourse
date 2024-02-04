@@ -34,13 +34,26 @@ export class HeroDetailComponent implements OnInit {
     this.location.back();
   }
 
- @debounce(2000)
- save(): void {
-   //debounce(() => {
+//  @debounce(2000)
+//  save(): void {
+//    //debounce(() => {
+//     this.heroService.updateHero(this.hero)
+//       .subscribe(() => this.goBack());
+//     //}, 250, false)();
+//   }
+
+save(): void {
+  someThirdPartyPromise().then(() => {
     this.heroService.updateHero(this.hero)
       .subscribe(() => this.goBack());
-    //}, 250, false)();
-  }
+  });
+ }
+}
+
+function someThirdPartyPromise() {
+  return new Promise((resolve) => {
+    resolve(null);
+  });
 }
 
 // just to test async. Looks some bug existed when call multiple times

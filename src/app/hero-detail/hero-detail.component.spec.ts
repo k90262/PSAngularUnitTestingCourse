@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, flush, tick } from "@angular/core/testing";
+import { ComponentFixture, TestBed, fakeAsync, flush, tick, waitForAsync } from "@angular/core/testing";
 import { HeroDetailComponent } from "./hero-detail.component";
 import { ActivatedRoute } from "@angular/router";
 import { HeroService } from "../hero.service";
@@ -43,9 +43,20 @@ describe('HeroDetailComponent', () => {
         fixture.detectChanges();
 
         fixture.componentInstance.save();
-        tick(2000);
-        //flush();
+        //tick(2000);
+        flush();
 
         expect(mockHeroService.updateHero).toHaveBeenCalled();
     }));
+
+    // it('should call updateHero when save is clicked', waitForAsync(() => {
+    //     mockHeroService.updateHero.and.returnValue(of({}));
+    //     fixture.detectChanges();
+
+    //     fixture.componentInstance.save();
+
+    //     fixture.whenStable().then(() => {
+    //         expect(mockHeroService.updateHero).toHaveBeenCalled();
+    //     });
+    // }));
 });
