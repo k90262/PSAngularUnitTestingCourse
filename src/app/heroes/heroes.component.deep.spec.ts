@@ -47,10 +47,7 @@ describe('HeroesComponent (Deep tests)', () => {
     });
 
     it('should render each hero as a HeroComponent', () => {
-        mockHeroService.getHeroes.and.returnValue(of(HEROES));
-
-        // run ngOnInit
-        fixture.detectChanges();
+        givenTriggerNgOnInit();
 
         var heroComponentDEs = fixture.debugElement.queryAll(By.directive(HeroComponent));
         expect(heroComponentDEs.length).toBe(3);
@@ -59,13 +56,18 @@ describe('HeroesComponent (Deep tests)', () => {
         }
     });
 
+
+    function givenTriggerNgOnInit() {
+        mockHeroService.getHeroes.and.returnValue(of(HEROES));
+
+        // run ngOnInit
+        fixture.detectChanges();
+    }
+
     it(`should call delete when the Heroe Component's 
     delete button is clicked`, () => {
       spyOn(fixture.componentInstance, 'delete');
-      mockHeroService.getHeroes.and.returnValue(of(HEROES));
-
-      // run ngOnInit
-      fixture.detectChanges();
+      givenTriggerNgOnInit();
 
       const hereoComponets = fixture.debugElement.queryAll(By.directive(HeroComponent));
       // METHOD 1. real trigger button click event
@@ -81,11 +83,8 @@ describe('HeroesComponent (Deep tests)', () => {
 
     it(`should call heroService.deleteHero when the Heroe Component's 
       delete button is clicked`, () => {
-        mockHeroService.getHeroes.and.returnValue(of(HEROES));
         mockHeroService.deleteHero.and.returnValue(of());
-
-        // run ngOnInit
-        fixture.detectChanges();
+        givenTriggerNgOnInit();
 
         const hereoComponets = fixture.debugElement.queryAll(By.directive(HeroComponent));
         hereoComponets[0].query(By.css('button'))
@@ -95,8 +94,7 @@ describe('HeroesComponent (Deep tests)', () => {
     });
 
     it('should add a new hero to the hero list when the add button is clicked', () => {
-        mockHeroService.getHeroes.and.returnValue(of(HEROES));
-        fixture.detectChanges();
+        givenTriggerNgOnInit();
         const name = 'Mr. Ice';
         const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
         mockHeroService.addHero.and.returnValue(of({id: 5, name: name, strength: 4}));
@@ -110,9 +108,24 @@ describe('HeroesComponent (Deep tests)', () => {
         expect(heroText).toContain(name);
     });
 
+    it('should not add a new hero to the hero list when the add button is clicked but input name is empty', () => {
+        //spyOn(fixture.componentInstance, 'add');
+        givenTriggerNgOnInit();
+        const name = '';
+        const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+        mockHeroService.addHero.and.returnValue(of({}));
+        const addButton = fixture.debugElement.queryAll(By.css('button'))[0];
+
+        inputElement.value = name;
+        addButton.triggerEventHandler('click', null);
+        fixture.detectChanges(); 
+
+        //expect(fixture.componentInstance.add).toHaveBeenCalledWith(name);
+        expect(mockHeroService.addHero).not.toHaveBeenCalled();
+    });
+
     it('should have the correct route for the first hero', () => {
-        mockHeroService.getHeroes.and.returnValue(of(HEROES));
-        fixture.detectChanges();
+        givenTriggerNgOnInit();
         const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
 
         let routerLink = heroComponents[0]
