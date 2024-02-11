@@ -2,6 +2,7 @@ import { TestBed } from "@angular/core/testing";
 import { HeroService } from "./hero.service";
 import { MessageService } from "./message.service";
 import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing";
+import { Hero } from "./hero";
 
 describe('HeroService', () => {
     let mockMessageService;
@@ -35,6 +36,19 @@ describe('HeroService', () => {
 
             req.flush({ id: 4, name: 'SuperDude', strength: 100 });
             //expect(req.request.method).toBe('GET'); // fixing warning 'SPEC HAS NO EXPECTATIONS'
+            httpTestingController.verify();
+        });
+    });
+    
+    describe('getHeros', () => {
+        it('should call get with the correct URL', () => {
+            service.getHeroes().subscribe(
+                heroes => {
+                    expect(heroes[0].id).toBe(4);
+                }
+            );
+            const req = httpTestingController.expectOne('api/heroes');
+            req.flush([{ id: 4, name: 'SuperDude', strength: 100 }]);
             httpTestingController.verify();
         });
     });
